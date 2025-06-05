@@ -81,6 +81,4 @@ _Enjoy the adventure in the Wumpus World!_
 ---
 
 
-<div align="center">
-  <h6>Machine Problem 5 by Vashti Karmelli V. Camu</h6>
-</div> 
+
