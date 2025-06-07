@@ -1,43 +1,29 @@
 import random
 from helper import Helper
-import sys
 
 WORLD_SIZE = 4
 func = Helper()
 
 class WumpusWorld:
     def __init__(self):
-        self.agent = Agent()
+        self.agent = Agent()  # Ensure Agent class is defined elsewhere
         self.cur_row = 0
         self.cur_col = 0
-        self.path = [[0] * 4 for _ in range(4)] 
+        self.path = [[0] * WORLD_SIZE for _ in range(WORLD_SIZE)]
+        self.world = [[''] * WORLD_SIZE for _ in range(WORLD_SIZE)]
+        self.world[0][0] = 'A'  # Start position
         self.path[0][0] = 1
-        self.world = [[''] * 4 for _ in range(4)] 
-        self.world[0][0] = 'A'
 
     def reset_world(self):
-        self.cur_row = 0
-        self.cur_col = 0
-        self.path = [[0] * 4 for _ in range(4)] 
-        self.path[0][0] = 1
-        self.world = [[''] * 4 for _ in range(4)] 
-        self.world[0][0] = 'A'
-        
+        self.__init__()
 
     def random_gold_wumpus_pits(self):
-        coordinates = set()  # Use a set to ensure uniqueness
+        coordinates = set()
         while len(coordinates) < 5:
-            x = random.randint(0, 3)
-            y = random.randint(0, 3)
-            if x == 0 and y == 0:
-                continue
-            elif x == 0 and y == 1:
-                continue
-            elif x == 1 and y == 0:
-                continue
-            coordinates.add((x, y))
+            x, y = random.randint(0, 3), random.randint(0, 3)
+            if (x, y) not in [(0, 0), (0, 1), (1, 0)]:
+                coordinates.add((x, y))
         return list(coordinates)
-    
 
     def add_stench_breeze(self):
         w_b = { 'W': 'S', 'P': 'B'}
