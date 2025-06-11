@@ -23,7 +23,7 @@ WIDTH = 780
 
 pg.init()
 screen = pg.display.set_mode((WIDTH, HEIGHT))
-pg.display.set_caption("Wumpus World (Space Edition) by VKVC")
+pg.display.set_caption("Wumpus World AI Agent")
 
 def generate_board():
     board = np.zeros((4, 4))
@@ -206,7 +206,7 @@ def confirm_quit():
         window.geometry('{}x{}+{}+{}'.format(width, height, x, y))
 
     def open_repo_link():
-        webbrowser.open("https://github.com/Vcarmelli/wumpus-world.git")
+        webbrowser.open("https://github.com/Getachew0557/Wumpus-world-AI-agent.git")
 
     def quit_game():
         global confirm
@@ -244,7 +244,7 @@ def confirm_quit():
 
 
 def main():
-    menu_bg = pg.image.load("assets/background.png")
+    menu_bg = pg.image.load("assets/customback.png")
     screen.blit(menu_bg, (0,0))
 
     while True:

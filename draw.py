@@ -1,24 +1,27 @@
 import pygame as pg
 
+# Constants
 space = 90
 mg_x = 70
 mg_y = 150
 WORLD_SIZE = 4
 
-# New custom colors
-AQUA = (0, 204, 204)
-WHITE = (255, 255, 255)
-DARK_GREEN = (34, 139, 34)
-LIGHT_GREEN = (169, 209, 142)
-DARK_BLUE = (30, 60, 90)
+# Custom Colors (no white)
+TEAL = (0, 128, 128)
+SOFT_GREEN = (100, 200, 150)
+DEEP_NAVY = (25, 35, 65)
+LIGHT_BLUE = (173, 216, 230)
+GOLDENROD = (218, 165, 32)
+CHARCOAL = (54, 69, 79)
 
+# Font Initialization
 pg.font.init()
 
 class Draw:
     def __init__(self, screen):
         self.screen = screen
 
-        # Update these to custom paths/icons if needed
+        # Load assets
         self.agent_img = pg.image.load("assets/agent.png")
         self.agent_side_img = pg.image.load("assets/agent_side.png")
         self.agent_victory_img = pg.image.load("assets/agent_victory.png")
@@ -31,15 +34,17 @@ class Draw:
         self.stench_img = pg.image.load("assets/cell_stench.png")
         self.wumpus_img = pg.image.load("assets/cell_wumpus.png")
 
-        self.font = pg.font.SysFont('Arial Black', 20)
+        # Modern Font
+        self.font = pg.font.SysFont('Segoe UI', 20, bold=True)
+        self.large_font = pg.font.SysFont('Segoe UI Semibold', 26, bold=True)
 
     def board(self):
-        board_rect = pg.Rect(mg_x, mg_y, 360, 360)
-        pg.draw.rect(self.screen, DARK_GREEN, board_rect, 7)
+        board_rect = pg.Rect(mg_x, mg_y, space * WORLD_SIZE, space * WORLD_SIZE)
+        pg.draw.rect(self.screen, CHARCOAL, board_rect, 6, border_radius=10)
 
-        for i in range(1, 4):
-            pg.draw.line(self.screen, DARK_GREEN, (mg_x, mg_y + i * space), (mg_x + 355, mg_y + i * space), 3)
-            pg.draw.line(self.screen, DARK_GREEN, (mg_x + i * space, mg_y), (mg_x + i * space, mg_y + 355), 3)
+        for i in range(1, WORLD_SIZE):
+            pg.draw.line(self.screen, CHARCOAL, (mg_x, mg_y + i * space), (mg_x + space * WORLD_SIZE, mg_y + i * space), 2)
+            pg.draw.line(self.screen, CHARCOAL, (mg_x + i * space, mg_y), (mg_x + i * space, mg_y + space * WORLD_SIZE), 2)
 
     def agent(self, row, col, direction):
         x = mg_x + col * space + 10
@@ -70,8 +75,11 @@ class Draw:
         x = mg_x + col * space
         y = mg_y + row * space
 
+        cell_rect = pg.Rect(x, y, space, space)
+        pg.draw.rect(self.screen, DEEP_NAVY, cell_rect)
+
         if cell_type == '' or cell_type == 'A':
-            pg.draw.rect(self.screen, DARK_BLUE, pg.Rect(x, y, space, space))
+            pass
         elif cell_type == 'B':
             self.screen.blit(self.breeze_img, (x, y))
         elif cell_type == 'BS':
@@ -110,27 +118,39 @@ class Draw:
             for c in range(col, WORLD_SIZE):
                 self.screen.blit(self.arrow_side_img, (mg_x + c * space + 10, y))
 
-    def status(self, text, color):
-        bg = pg.Surface((240, 90))
-        bg.fill(DARK_BLUE)
-        rect = bg.get_rect(center=(610, 350))
-        pg.draw.rect(self.screen, AQUA, rect.inflate(4, 4), 2)
+    def status(self, text, color=TEAL):
+        bg = pg.Surface((250, 90))
+        bg.fill(DEEP_NAVY)
+        rect = bg.get_rect(center=(620, 350))
+        pg.draw.rect(self.screen, GOLDENROD, rect.inflate(6, 6), 3, border_radius=8)
 
-        lines = [text[:16], text[16:]] if len(text) > 16 else [text]
-        for i, line in enumerate(lines):
+        # Dynamic multi-line support
+        words = text.split(' ')
+        lines = []
+        line = ""
+        for word in words:
+            if len(line + word) < 20:
+                line += word + " "
+            else:
+                lines.append(line.strip())
+                line = word + " "
+        lines.append(line.strip())
+
+        for i, line in enumerate(lines[:2]):
             output = self.font.render(line, True, color)
-            line_rect = output.get_rect(center=(rect.centerx, rect.centery + (i * 30 - 15)))
             self.screen.blit(bg, rect)
+            line_rect = output.get_rect(center=(rect.centerx, rect.top + 30 + i * 25))
             self.screen.blit(output, line_rect)
 
-    def score(self, text, color):
-        bg = pg.Surface((115, 60))
-        bg.fill(LIGHT_GREEN)
+    def score(self, text, color=CHARCOAL):
+        bg = pg.Surface((130, 70))
+        bg.fill(SOFT_GREEN)
         rect = bg.get_rect(center=(680, 180))
+        pg.draw.rect(self.screen, TEAL, rect, 2, border_radius=6)
 
         label = self.font.render("Score", True, color)
-        value = self.font.render(text, True, color)
+        value = self.large_font.render(text, True, color)
 
         self.screen.blit(bg, rect)
-        self.screen.blit(label, label.get_rect(center=(rect.centerx, rect.centery - 10)))
-        self.screen.blit(value, value.get_rect(center=(rect.centerx, rect.centery + 10)))
+        self.screen.blit(label, label.get_rect(center=(rect.centerx, rect.centery - 15)))
+        self.screen.blit(value, value.get_rect(center=(rect.centerx, rect.centery + 15)))

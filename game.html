@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wumpus World AI Project</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Custom CSS for the background and text animation */
+        body {
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            overflow: hidden; /* Hide scrollbars if content overflows */
+            display: flex;
+            flex-direction: column; /* Allow stacking of elements */
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh; /* Ensure body takes full viewport height */
+            /* Updated background color to match original image */
+            background-color: #0a1c2a;
+            /* Removed background-image as per the new instruction and previous original image */
+            background-size: cover; /* Cover the entire viewport */
+            background-position: center; /* Center the background image */
+            background-repeat: no-repeat; /* Do not repeat the background image */
+            color: white; /* Default text color */
+            position: relative; /* For absolute positioning of elements */
+        }
+
+        .wumpus-title {
+            position: absolute;
+            top: 10%; /* Adjusted position to match the new image */
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 5rem; /* Large font size for Wumpus World text */
+            font-weight: bold;
+            text-align: center;
+            white-space: nowrap; /* Keep text in a single line */
+            border-radius: 0.75rem;
+            padding: 0.5rem 1rem; /* Reduced padding slightly */
+            background: rgba(0, 0, 0, 0.3); /* Slightly transparent background for readability */
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08);
+            z-index: 10; /* Ensure text is above other elements */
+            animation: glow-white-blue 2s infinite alternate; /* New glow animation */
+        }
+
+        /* Keyframes for the white/blue glow effect for "Wumpus World" */
+        @keyframes glow-white-blue {
+            0% {
+                color: #FFFFFF; /* White color */
+                text-shadow: 0 0 15px rgba(135, 206, 250, 0.8), 0 0 30px rgba(135, 206, 250, 0.6); /* Sky blue glow */
+            }
+            50% {
+                color: #F0F8FF; /* Alice Blue (lighter white) */
+                text-shadow: 0 0 8px rgba(135, 206, 250, 0.4), 0 0 15px rgba(135, 206, 250, 0.3);
+            }
+            100% {
+                color: #FFFFFF; /* Back to original white */
+                text-shadow: 0 0 15px rgba(135, 206, 250, 0.8), 0 0 30px rgba(135, 206, 250, 0.6);
+            }
+        }
+
+        /* Responsive adjustments for smaller screens */
+        @media (max-width: 768px) {
+            .wumpus-title {
+                font-size: 3rem; /* Adjust font size for tablets */
+                padding: 0.75rem;
+                top: 8%;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .wumpus-title {
+                font-size: 2rem; /* Adjust font size for mobile phones */
+                padding: 0.5rem;
+                top: 5%;
+            }
+        }
+
+        .ufo-container {
+            position: absolute;
+            top: 0%; /* Adjusted position to top right */
+            right: 0%;
+            width: 300px; /* Base size for UFO */
+            height: auto;
+            z-index: 5;
+        }
+
+        /* Styles for the bottom icons and text - now grouped to the right */
+        .bottom-icons-container {
+            position: absolute;
+            bottom: 5%;
+            right: 5%; /* Position to the right */
+            display: flex;
+            flex-direction: column; /* Stack items vertically */
+            align-items: flex-end; /* Align items to the right */
+            z-index: 5;
+            padding-right: 1rem; /* Add some padding from the right edge */
+        }
+
+        .icon-item {
+            display: flex;
+            align-items: center; /* Align icon and text horizontally */
+            margin-bottom: 1rem; /* Spacing between icon-text pairs */
+        }
+
+        .icon-item:last-child {
+            margin-bottom: 0; /* No margin for the last item */
+        }
+
+        .icon-item svg {
+            width: 80px; /* Base size for bottom icons */
+            height: auto;
+            margin-right: 0.75rem; /* Space between icon and text */
+        }
+
+        .icon-item p {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: white;
+            text-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+            text-align: right; /* Align text to the right */
+        }
+
+        /* Responsive adjustments for icons */
+        @media (max-width: 768px) {
+            .ufo-container {
+                width: 200px; /* Smaller UFO on tablets */
+            }
+            .icon-item svg {
+                width: 60px; /* Smaller icons on tablets */
+            }
+            .icon-item p {
+                font-size: 1rem;
+            }
+            .bottom-icons-container {
+                right: 3%;
+                padding-right: 0.5rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .ufo-container {
+                width: 150px; /* Even smaller UFO on mobiles */
+            }
+            .icon-item svg {
+                width: 40px; /* Even smaller icons on mobiles */
+            }
+            .icon-item p {
+                font-size: 0.8rem;
+            }
+            .bottom-icons-container {
+                right: 2%;
+                padding-right: 0.25rem;
+            }
+        }
+
+        /* Keyframes for purple glow on breeze */
+        @keyframes glow-purple {
+            0% { filter: drop-shadow(0 0 5px #a020f0) drop-shadow(0 0 10px #a020f0); }
+            50% { filter: drop-shadow(0 0 3px #a020f0); }
+            100% { filter: drop-shadow(0 0 5px #a020f0) drop-shadow(0 0 10px #a020f0); }
+        }
+        .breeze-icon {
+            animation: glow-purple 1.5s infinite alternate;
+        }
+    </style>
+</head>
+<body class="relative">
+    <!-- UFO Icon -->
+    <div class="ufo-container">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 200" width="100%" height="auto">
+            <!-- Saucer top -->
+            <ellipse cx="150" cy="100" rx="120" ry="40" fill="#a0a0a0" stroke="#777" stroke-width="3"/>
+            <!-- Saucer bottom -->
+            <ellipse cx="150" cy="110" rx="100" ry="30" fill="#c0c0c0" stroke="#999" stroke-width="3"/>
+            <!-- Cabin dome -->
+            <circle cx="150" cy="75" r="30" fill="#87CEEB" stroke="#6495ED" stroke-width="2"/>
+            <!-- Light beam -->
+            <polygon points="150,140 80,200 220,200" fill="url(#ufoLightGradient)"/>
+            <defs>
+                <linearGradient id="ufoLightGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                    <stop offset="0%" style="stop-color:rgb(255,255,0);stop-opacity:0.8" />
+                    <stop offset="100%" style="stop-color:rgb(255,255,0);stop-opacity:0" />
+                </linearGradient>
+            </defs>
+        </svg>
+    </div>
+
+    <div class="wumpus-title">WUMPUS WORLD</div>
+
+    <!-- Bottom Icons and Text Container -->
+    <div class="bottom-icons-container">
+        <!-- Breeze Icon -->
+        <div class="icon-item">
+            <svg class="breeze-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+                <defs>
+                    <filter id="purple-glow" x="-50%" y="-50%" width="200%" height="200%">
+                        <feGaussianBlur in="SourceGraphic" stdDeviation="3" result="blur" />
+                        <feColorMatrix in="blur" type="matrix" values="
+                            0 0 0 0 0
+                            0 0 0 0 0
+                            0 0 0 0 0.8
+                            0 0 0 1 0" result="purpleBlur" />
+                        <feMerge>
+                            <feMergeNode in="purpleBlur"/>
+                            <feMergeNode in="SourceGraphic"/>
+                        </feMerge>
+                    </filter>
+                </defs>
+                <path d="M 20 50 Q 40 20 60 50 T 80 50 M 25 60 Q 45 30 65 60 T 85 60"
+                      fill="none" stroke="#A020F0" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"
+                      filter="url(#purple-glow)"/>
+                <path d="M 20 50 Q 40 20 60 50 T 80 50 M 25 60 Q 45 30 65 60 T 85 60"
+                      fill="none" stroke="#E0BBE4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <p>BREEZE</p>
+        </div>
+
+        <!-- Stench Icon (Monkey) -->
+        <div class="icon-item">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+                <!-- Body -->
+                <ellipse cx="50" cy="65" rx="30" ry="25" fill="#a0522d" stroke="#8b4513" stroke-width="2"/>
+                <!-- Head -->
+                <circle cx="50" cy="35" r="20" fill="#a0522d" stroke="#8b4513" stroke-width="2"/>
+                <!-- Ears -->
+                <circle cx="30" cy="30" r="8" fill="#a0522d" stroke="#8b4513" stroke-width="2"/>
+                <circle cx="70" cy="30" r="8" fill="#a0522d" stroke="#8b4513" stroke-width="2"/>
+                <!-- Face detail -->
+                <circle cx="50" cy="38" r="10" fill="#deb887"/>
+                <!-- Eyes -->
+                <circle cx="45" cy="35" r="2" fill="black"/>
+                <circle cx="55" cy="35" r="2" fill="black"/>
+                <!-- Mouth (simple arc) -->
+                <path d="M 45 45 Q 50 50 55 45" stroke="black" stroke-width="1" fill="none"/>
+                <!-- Arms -->
+                <rect x="25" y="55" width="10" height="20" fill="#a0522d" rx="5" ry="5" transform="rotate(-15 25 55)"/>
+                <rect x="65" y="55" width="10" height="20" fill="#a0522d" rx="5" ry="5" transform="rotate(15 75 55)"/>
+            </svg>
+            <p>STENCH</p>
+        </div>
+
+        <!-- Gold Icon -->
+        <div class="icon-item">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+                <!-- Chest Base -->
+                <rect x="20" y="50" width="60" height="30" fill="#8B4513" rx="5" ry="5"/>
+                <!-- Chest Lid -->
+                <path d="M 20 50 Q 25 40 50 40 T 80 50 L 75 45 Q 50 35 25 45 Z" fill="#A0522D" stroke="#8B4513" stroke-width="2"/>
+                <!-- Gold coins -->
+                <circle cx="35" cy="45" r="8" fill="#FFD700" stroke="#DAA520" stroke-width="1"/>
+                <circle cx="50" cy="40" r="10" fill="#FFD700" stroke="#DAA520" stroke-width="1"/>
+                <circle cx="65" cy="45" r="8" fill="#FFD700" stroke="#DAA520" stroke-width="1"/>
+                <circle cx="40" cy="55" r="7" fill="#FFD700" stroke="#DAA520" stroke-width="1"/>
+                <circle cx="60" cy="55" r="7" fill="#FFD700" stroke="#DAA520" stroke-width="1"/>
+            </svg>
+            <p>GOLD</p>
+        </div>
+    </div>
+</body>
+</html>
