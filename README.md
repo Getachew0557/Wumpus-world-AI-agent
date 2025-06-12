@@ -30,6 +30,10 @@ The Wumpus World environment is:
 
 - **Sensors**: The agent in the Wumpus World perceives five types of sensory information that help it infer what lies beyond its immediate surroundings. A stench is perceived when the agent is in a cell adjacent to the Wumpus, indicating potential danger nearby. A breeze is felt in any cell adjacent to a bottomless pit, warning the agent of a deadly drop. When the agent enters a cell containing the gold, it perceives a glitter, signaling that the treasure is within reach. If the agent attempts to move forward into a wall, it experiences a bump, letting it know that movement in that direction is blocked. Finally, if the Wumpus is killed by the agent’s arrow, a loud scream echoes through the cave, confirming that the threat has been neutralized.
 
+| Gold | Wumpus | Pit | Stench | Breeze |
+| :---: | :---: | :---: | :---: | :---: |
+| ![Gold](assets/cell_gold.png) | ![Wumpus](assets/cell_wumpus.png) | ![Pit](assets/cell_pit.png) | ![Stench](assets/cell_stench.png) | ![Breeze](assets/cell_breeze.png) |
+
 
 
 ## 🎯 Objective
@@ -38,29 +42,20 @@ The main objective of the agent is to safely retrieve the gold and return to the
 
 ## How to Play
 
-1. **Objective**: The mission is to navigate the treacherous space caverns, locate the golden treasure, and avoid dangerous hazards lurking in the darkness of space. 
-   
-2. **Symbols**:
-   
-| Gold | Wumpus | Pit | Stench | Breeze |
-| :---: | :---: | :---: | :---: | :---: |
-| ![Gold](assets/cell_gold.png) | ![Wumpus](assets/cell_wumpus.png) | ![Pit](assets/cell_pit.png) | ![Stench](assets/cell_stench.png) | ![Breeze](assets/cell_breeze.png) |
-
-
-3. **Game Phases**:
+1. **Game Phases**:
    - **Setup**: The game randomly generates the cave layout, placing the wumpus, pits, and gold.
    - **AI Agent Move**: The AI agent makes a move based on its perception of the environment and the knowledge base it maintains.
    - **Game Over**: The game ends if you are eaten by the wumpus, fall into a pit, or successfully retrieve the gold.
 
 
-4. **Scoring System**:
+2. **Scoring System**:
     - **`Moving`**: -1 point per move
     - **`Use of arrows`**: -10 points
     - **`Retrieving gold`**: +1000 points
     - **`Killing a Wumpus`**: +2000 points
   
    
-5. **Winning Condition**:
+3. **Winning Condition**:
    - Retrieve the gold and make it back to the starting position.
      
 
@@ -85,30 +80,25 @@ python main.py
 Here are some screenshots of the game:
 
 ### Title Screen
-![Title Screen](screenshots/title-screen.png)
+![Title Screen](assets/background1.png)
 
-### Game Description
-![Game Description](screenshots/game-description.png)
 
 ### Main Game
 #### Starting Phase
-![Starting Phase](screenshots/game-1.png)
+![Starting Phase](assets/game-bg2.png)
 
-#### Ending Phases
+<!-- #### Ending Phases
 **Fall into Pit**
 
 ![Fall into Pit](screenshots/game-pit.png)
 
 **Eaten by Wumpus**
 
-![Eaten by Wumpus](screenshots/game-wumpus.png)
+![Eaten by Wumpus](assets/game-wumpus.png)
 
 **Retreiving Gold**
 
-![Winning Phase](screenshots/wumpus-world.gif)
-
-
-_Enjoy the adventure in the Wumpus World!_
+![Winning Phase](screenshots/wumpus-world.gif) -->
 
 
 ---
