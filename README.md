@@ -33,7 +33,7 @@ Welcome to the Wumpus Game Space Edition! Explore the depths of space in this ad
 
 ## How to Run
 
-1. Clone this repository.  ` https://github.com/Vcarmelli/wumpus-world.git  `
+1. Clone this repository.  `https://github.com/Getachew0557/Wumpus-world-AI-agent.git`
 2. Navigate to the directory containing the game files.
 3. Run the following command:
 
@@ -43,8 +43,8 @@ python main.py
 
 
 ## Dependencies
-- Python 3.11
-- Pygame 2.5.2
+- Python 3.x
+- Pygame 2.5.x
 
 
 ## Screenshots

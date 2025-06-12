@@ -69,7 +69,7 @@ def wumpus_world():
     ww = WumpusWorld()
     ww.prepare_environment()
     
-    game_bg = pg.image.load("assets/game-bg.png")
+    game_bg = pg.image.load("assets/game-bg1.png")
     screen.blit(game_bg, (0,0)) 
     while True:
         
@@ -244,7 +244,7 @@ def confirm_quit():
 
 
 def main():
-    menu_bg = pg.image.load("assets/customback.png")
+    menu_bg = pg.image.load("assets/background1.png")
     screen.blit(menu_bg, (0,0))
 
     while True:
