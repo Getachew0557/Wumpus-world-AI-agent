@@ -43,25 +43,25 @@ class Helper:
         patterns_list = []
         for i in range(-1, WORLD_SIZE):
             for j in range(-1, WORLD_SIZE):
-                # Horizontal patterns
+                # Horizontal patterns extraction
                 triangle = [(i, j), (i + 1, j + 1), (i, j + 2)]
                 patterns_list.append({"pattern": triangle, "location": (i, j + 1)})
 
                 triangle = [(i + 1, j), (i, j + 1), (i + 1, j + 2)]
                 patterns_list.append({"pattern": triangle, "location": (i + 1, j + 1)})
 
-                # Vertical patterns
+                # Vertical patterns extraction
                 triangle = [(i, j), (i + 1, j + 1), (i + 2, j)]
                 patterns_list.append({"pattern": triangle, "location": (i + 1, j)})
 
                 triangle = [(i, j + 1), (i + 1, j), (i + 2, j + 1)]
                 patterns_list.append({"pattern": triangle, "location": (i + 1, j + 1)})
 
-        # Filter patterns that have more than one valid cell
+        # Filter patterns that have more than one valid cell in the cave
         patterns_list = [pattern for pattern in patterns_list
                          if sum(1 for coord in pattern["pattern"] if self.is_valid(coord[0], coord[1])) > 1]
 
-        # Remove out-of-bounds cells from pattern
+        # Remove out-of-bounds cells from pattern of the wumpus wold
         for pattern in patterns_list:
             pattern["pattern"] = [coord for coord in pattern["pattern"] if self.is_valid(coord[0], coord[1])]
 
