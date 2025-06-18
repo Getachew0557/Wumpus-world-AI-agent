@@ -4,6 +4,8 @@ The Wumpus World is a classic environment used in artificial intelligence resear
 
 This version of Wumpus World is reimagined as a space-themed exploration mission, where the agent explores a hostile alien cave system in search of treasure.
 
+View full project documentation here: [Wumpus World AI Agent - DeepWiki](https://deepwiki.com/Getachew0557/Wumpus-world-AI-agent)
+
 ## ⚙️ Properties of the World
 The Wumpus World environment is:
 
